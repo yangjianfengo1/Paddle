@@ -5,6 +5,24 @@
 # are consistent and correspond one-to-one. It's forbidden that the
 # operator configured in this yaml file does not have Python API.
 
+- op : qkv_split_rope_fused_op
+  args : (Tensor qkv_input, Tensor rotary_emb, Tensor seq_lens, int rotary_emb_dims=1, int qkv_seq_lens_offset=1)
+  output : Tensor(q_output), Tensor(k_output), Tensor(v_output)
+  infer_meta :
+    func : QkvSplitRopeFusedInferMeta
+  kernel :
+    func : qkv_split_rope_fused_op
+    data_type : qkv_input
+
+- op : kv_split_fused_op
+  args : (Tensor kv_input)
+  output : Tensor(k_output), Tensor(v_output)
+  infer_meta :
+    func : KvSplitInferMeta
+  kernel :
+    func : kv_split_fused_op
+    data_type : kv_input
+    
 - op : abs
   args : (Tensor x)
   output : Tensor(out)

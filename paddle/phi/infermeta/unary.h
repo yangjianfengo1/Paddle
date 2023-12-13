@@ -33,7 +33,11 @@ class MetaConfig;
 // infer lod or other useful data.
 //
 // The InferMeta Functions in this file are arranged in alphabetic order.
-
+void KvSplitInferMeta(
+    const MetaTensor& kv_input,
+    MetaTensor* k_output,
+    MetaTensor* v_output);
+    
 void AffineGridInferMeta(const MetaTensor& input,
                          const IntArray& outputShape,
                          bool align_corners,

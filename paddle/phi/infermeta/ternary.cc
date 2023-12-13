@@ -23,6 +23,48 @@ limitations under the License. */
 
 namespace phi {
 
+void QkvSplitRopeFusedInferMeta(
+    const MetaTensor& qkv_input, 
+    const MetaTensor& rotary_emb,
+    const MetaTensor& seq_lens, 
+    const int rotary_emb_dims, 
+    const int qkv_seq_lens_offset,
+    MetaTensor* q_output, 
+    MetaTensor* k_output,
+    MetaTensor* v_output) {
+  auto in_dims = qkv_input.dims();
+  PADDLE_ENFORCE_GE(
+    in_dims.size(),
+    5,
+    phi::errors::InvalidArgument(
+    "'qkv_input.dims()'(%d) must be greater than or equal to"
+    " -num_dims(%d).",
+    in_dims.size(),
+    5));
+  const int bsz = in_dims[0];
+  const int seq_len = in_dims[1];
+  const int three = in_dims[2];
+  PADDLE_ENFORCE_GE(
+    three,
+    3,
+    phi::errors::InvalidArgument(
+    "'qkv_input.dims()[2]'(%d) must be greater than or equal to"
+    " -num_dims(%d).",
+    three,
+    3));
+  const int head_num = in_dims[3];
+  const int head_dim = in_dims[4];
+  std::vector<int> out_shape = {bsz, seq_len, head_num, head_dim};
+  const phi::DDim out_dims(out_shape.data(), out_shape.size());
+  q_output->set_dims(out_dims);
+  k_output->set_dims(out_dims);
+  v_output->set_dims(out_dims);
+  q_output->set_dtype(qkv_input.dtype());
+  k_output->set_dtype(qkv_input.dtype());
+  v_output->set_dtype(qkv_input.dtype());
+}
+
+
 void AccuracyInferMeta(const MetaTensor& out,
                        const MetaTensor& indice,
                        const MetaTensor& label,

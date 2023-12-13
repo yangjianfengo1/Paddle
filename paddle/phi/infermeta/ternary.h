@@ -32,7 +32,16 @@ namespace phi {
 //   infer lod or other useful data.
 //
 // The InferMeta Functions in this file are arranged in alphabetic order.
-
+void QkvSplitRopeFusedInferMeta(
+    const MetaTensor& qkv_input, 
+    const MetaTensor& rotary_emb,
+    const MetaTensor& seq_lens, 
+    const int rotary_emb_dims, 
+    const int qkv_seq_lens_offset,
+    MetaTensor* q_output, 
+    MetaTensor* k_output,
+    MetaTensor* v_output);
+    
 void AccuracyInferMeta(const MetaTensor& out,
                        const MetaTensor& indice,
                        const MetaTensor& label,
