@@ -53,26 +53,16 @@ void KvSplitInferMeta(
   auto in_dims = kv_input.dims();
   PADDLE_ENFORCE_GE(
     in_dims.size(),
-    5,
+    4,
     phi::errors::InvalidArgument(
-    "'qkv_input.dims()'(%d) must be greater than or equal to"
-    " -num_dims(%d).",
+    "'kv_input.dims()'(%d) must be greater than or equal to"
+    " num_dims(%d).",
     in_dims.size(),
-    5));
-  const int bsz = in_dims[0];
-  const int seq_len = in_dims[1];
-  const int two = in_dims[2];
-  PADDLE_ENFORCE_GE(
-    two,
-    2,
-    phi::errors::InvalidArgument(
-    "'qkv_input.dims()[2]'(%d) must be greater than or equal to"
-    " -num_dims(%d).",
-    two,
-    2));
-  const int head_num = in_dims[3];
-  const int head_dim = in_dims[4];
-  std::vector<int> out_shape = {bsz, seq_len, head_num, head_dim};
+    4));
+  const int token_num = in_dims[0];
+  const int num_head = in_dims[2];
+  const int head_dim = in_dims[3];
+  std::vector<int> out_shape = {token_num, num_head, head_dim};
   const phi::DDim out_dims(out_shape.data(), out_shape.size());
   k_output->set_dims(out_dims);
   v_output->set_dims(out_dims);

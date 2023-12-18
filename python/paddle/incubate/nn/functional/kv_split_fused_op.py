@@ -27,9 +27,8 @@ def kv_split_fused_op(kv_input):
     helper = LayerHelper('kv_split_fused_op', **locals())
     k_out = helper.create_variable_for_type_inference(dtype=kv_input.dtype)
     v_out = helper.create_variable_for_type_inference(dtype=kv_input.dtype)
-
     helper.append_op(
         type='kv_split_fused_op',
         inputs={'kv_input': kv_input},
-        outputs={'k_output': k_out, "v_output":[v_out]})
+        outputs={'k_output': k_out, "v_output": v_out})
     return k_out, v_out

@@ -69,16 +69,15 @@ void KvSplitFusedKernel(
     dev_ctx.template Alloc<T>(v_output);
     const auto x_dims = kv_input.dims();
     auto cu_stream = dev_ctx.stream();
-    const int bsz = x_dims[0];
-    const int seq_len = x_dims[1];
-    const int num_head = x_dims[3];
-    const int dim_head = x_dims[4];
+    const int token_num = x_dims[0];
+    const int head_num = x_dims[2];
+    const int head_dim = x_dims[3];
     constexpr int VEC_16B = 16;
   
     constexpr int PackSize = VEC_16B / sizeof(T);
-    const int elem_cnt = bsz * seq_len * num_head * dim_head * 2;
+    const int elem_cnt = token_num * head_num * head_dim * 2;
     const int pack_num = elem_cnt / PackSize;
-    assert(elem_cnt % PackSize == 0);
+    assert(head_dim % PackSize == 0);
     const int blocksize = 128;
     const int grid_size = (pack_num + blocksize - 1) / blocksize;
     fusedKV_split_kernel<T, PackSize>
@@ -87,8 +86,8 @@ void KvSplitFusedKernel(
         k_output->data<T>(),
         v_output->data<T>(),
         elem_cnt,
-        num_head,
-        dim_head);
+        head_num,
+        head_dim);
 }
 }
 

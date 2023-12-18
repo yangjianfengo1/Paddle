@@ -31,6 +31,8 @@ from .variable_length_memory_efficient_attention import (
 from .fused_rms_norm import fused_rms_norm
 from .fused_layer_norm import fused_layer_norm
 from .masked_multihead_attention import masked_multihead_attention
+from .qkv_split_rope_fused_op import qkv_split_rope_fused_op
+from .kv_split_fused_op import kv_split_fused_op
 
 __all__ = [
     'fused_multi_head_attention',
@@ -47,4 +49,6 @@ __all__ = [
     "fused_rms_norm",
     "fused_layer_norm",
     "masked_multihead_attention",
+    "qkv_split_rope_fused_op",
+    "kv_split_fused_op"
 ]
