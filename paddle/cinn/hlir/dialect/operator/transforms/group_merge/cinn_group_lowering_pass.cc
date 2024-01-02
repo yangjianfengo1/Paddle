@@ -177,7 +177,7 @@ class GroupOpPattern : public pir::OpRewritePattern<cinn::dialect::GroupOp> {
       auto fn_ptr_res = ir_compiler->BuildCUDAJITInfo({group});
       std::unordered_map<std::string, ::pir::Attribute> op_attrs{
           {cinn::dialect::JitKernelOp::kAttrName,
-           cinn::dialect::CUDAJITInfoAttribute::get(ctx, fn_ptr_res[0])},
+           cinn::dialect::CINNKernelInfoAttribute::get(ctx, fn_ptr_res[0])},
       };
 
       // Generate jit kernel op input and output
@@ -211,7 +211,7 @@ class GroupOpPattern : public pir::OpRewritePattern<cinn::dialect::GroupOp> {
   }
 
  private:
-  std::shared_ptr<pir::ShapeConstraintIRAnalysis> shape_analysis_;
+  std::shared_ptr<pir::ShapeConstraintIRAnalysis> shape_analysis_{nullptr};
 };
 
 class CinnGroupLoweringPass : public pir::PatternRewritePass {
@@ -237,7 +237,7 @@ class CinnGroupLoweringPass : public pir::PatternRewritePass {
   }
 
  private:
-  const std::shared_ptr<pir::ShapeConstraintIRAnalysis>& shape_analysis_;
+  std::shared_ptr<pir::ShapeConstraintIRAnalysis> shape_analysis_{nullptr};
 };
 
 }  // namespace

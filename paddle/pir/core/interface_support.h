@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "paddle/pir/core/enforce.h"
+#include "paddle/common/enforce.h"
 #include "paddle/pir/core/interface_value.h"
 
 namespace pir {
@@ -39,8 +39,8 @@ class ConstructInterfacesOrTraits {
   /// Placement new interface.
   template <typename T>
   static void ConstrctInterface(InterfaceSet &interface_set) {  // NOLINT
-    InterfaceValue val = InterfaceValue::
-        Get<ConcreteT, T, typename T::template Model<ConcreteT>>();
+    InterfaceValue val =
+        InterfaceValue::Get<T, typename T::template Model<ConcreteT>>();
     auto suceess = interface_set.insert(std::move(val)).second;
     IR_ENFORCE(suceess,
                "Interface: id[%u] is already registered. inset failed",
